@@ -27,9 +27,11 @@ function draw() {
 
   if (gameState === "start") {
     showStartScreen();
-  } else if (gameState === "playing") {
+  } 
+  else if (gameState === "playing") {
     playGame();
-  } else if (gameState === "gameover") {
+  } 
+  else if (gameState === "gameover") {
     showGameOver();
   }
 }
