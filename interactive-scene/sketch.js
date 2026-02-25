@@ -3,7 +3,7 @@
 // 2/24/2026
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// - Added ability to Resize Window
 
 
 let playerX;
@@ -18,7 +18,7 @@ let startTime;
 let gameTime = 30; // seconds
 
 function setup() {
-  createCanvas(600, 400);
+  createCanvas(windowWidth, windowHeight);
   resetGame();
 }
 
@@ -151,4 +151,8 @@ function resetGame() {
 
   targetSpeedX = random(2, 4);
   targetSpeedY = random(2, 4);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
