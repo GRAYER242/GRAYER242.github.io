@@ -8,6 +8,8 @@
 
 let playerX;
 let playerY;
+let playerSize = 40;
+let targetSize = 30;
 let targetX;
 let targetY;
 let targetSpeedX;
@@ -16,7 +18,15 @@ let score = 0;
 let gameState = "start"; // start, playing, gameover
 let startTime;
 let gameTime = 30; // seconds
+let grid; // backround
+let difficulty = "medium"; // difficulty default mode
+let easyBtn;
+let mediumBtn;
+let hardBtn;
 
+function preload(){
+  grid = loadImage("Circle Grid.avif");
+}
 function setup() {
   createCanvas(windowWidth, windowHeight);
   resetGame();
@@ -24,6 +34,7 @@ function setup() {
 
 function draw() {
   background(220);
+  image(grid, 0, 0, windowWidth, windowHeight);
 
   if (gameState === "start") {
     showStartScreen();
@@ -43,7 +54,7 @@ function playGame() {
 
   // Draw player
   fill(0, 100, 255);
-  ellipse(playerX, playerY, 40);
+  ellipse(playerX, playerY, playerSize);
 
   // Move target
   targetX += targetSpeedX;
@@ -74,7 +85,7 @@ function playGame() {
 
   // Draw target
   fill(255, 0, 0);
-  ellipse(targetX, targetY, 30);
+  ellipse(targetX, targetY, targetSize);
 
   // Collisions
   let d = dist(playerX, playerY, targetX, targetY);
@@ -109,6 +120,8 @@ function playGame() {
 }
 
 function showStartScreen() {
+  setDifficulty();
+  
   textAlign(CENTER);
   fill(0);
   textSize(28);
@@ -118,6 +131,24 @@ function showStartScreen() {
   text("You have 30 seconds!", width / 2, height / 2);
   text("Move mouse to catch the red circle", width / 2, height / 2 + 30);
   text("Press S to Start", width / 2, height / 2 + 60);
+  
+  easyBtn = createButton('Easy');
+  easyBtn.position(width / 3, height / 1.5);
+  easyBtn.mousePressed(() => { 
+    difficulty = 'easy'; setDifficulty(); 
+  });
+
+  medBtn = createButton('Medium');
+  medBtn.position(width / 2, height / 1.5);
+  medBtn.mousePressed(() => { 
+    difficulty = 'medium'; setDifficulty(); 
+  });
+
+  hardBtn = createButton('Hard');
+  hardBtn.position(width / 1.5, height / 1.5);
+  hardBtn.mousePressed(() => { 
+    difficulty = 'hard'; setDifficulty(); 
+  });
 }
 
 function showGameOver() {
@@ -155,4 +186,16 @@ function resetGame() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+}
+
+function setDifficulty() {
+  if (difficulty === 'easy') {
+    playerSize = 50;
+  } 
+  else if (difficulty === 'medium') {
+    playerSize = 40;
+  } 
+  else if (difficulty === 'hard') {
+    playerSize = 30;
+  }
 }
