@@ -30,6 +30,24 @@ function preload(){
 function setup() {
   createCanvas(windowWidth, windowHeight);
   resetGame();
+  
+  easyBtn = createButton('Easy');
+  easyBtn.position(width / 3.05, height / 1.5);
+  easyBtn.mousePressed(() => { 
+    difficulty = 'easy'; setDifficulty(); 
+  });
+
+  mediumBtn = createButton('Medium');
+  mediumBtn.position(width / 2.05, height / 1.5);
+  mediumBtn.mousePressed(() => { 
+    difficulty = 'medium'; setDifficulty(); 
+  });
+
+  hardBtn = createButton('Hard');
+  hardBtn.position(width / 1.55, height / 1.5);
+  hardBtn.mousePressed(() => { 
+    difficulty = 'hard'; setDifficulty(); 
+  });
 }
 
 function draw() {
@@ -90,7 +108,7 @@ function playGame() {
   // Collisions
   let d = dist(playerX, playerY, targetX, targetY);
 
-  if (d < 35) {
+  if (d < playerSize) {
     score++;
 
     targetX = random(width);
@@ -131,27 +149,10 @@ function showStartScreen() {
   text("You have 30 seconds!", width / 2, height / 2);
   text("Move mouse to catch the red circle", width / 2, height / 2 + 30);
   text("Press S to Start", width / 2, height / 2 + 60);
-  
-  easyBtn = createButton('Easy');
-  easyBtn.position(width / 3, height / 1.5);
-  easyBtn.mousePressed(() => { 
-    difficulty = 'easy'; setDifficulty(); 
-  });
-
-  medBtn = createButton('Medium');
-  medBtn.position(width / 2, height / 1.5);
-  medBtn.mousePressed(() => { 
-    difficulty = 'medium'; setDifficulty(); 
-  });
-
-  hardBtn = createButton('Hard');
-  hardBtn.position(width / 1.5, height / 1.5);
-  hardBtn.mousePressed(() => { 
-    difficulty = 'hard'; setDifficulty(); 
-  });
 }
 
 function showGameOver() {
+
   textAlign(CENTER);
   fill(0);
   textSize(28);
@@ -166,11 +167,17 @@ function keyPressed() {
   if (key === "s" || key === "S") {
     startTime = millis();
     gameState = "playing";
+    easyBtn.hide();
+    mediumBtn.hide();
+    hardBtn.hide();
   }
 
   if (key === "r" || key === "R") {
     resetGame();
     gameState = "start";
+    easyBtn.show();
+    mediumBtn.show();
+    hardBtn.show();
   }
 }
 
@@ -190,12 +197,12 @@ function windowResized() {
 
 function setDifficulty() {
   if (difficulty === 'easy') {
-    playerSize = 50;
+    playerSize = 60;
   } 
   else if (difficulty === 'medium') {
     playerSize = 40;
   } 
   else if (difficulty === 'hard') {
-    playerSize = 30;
+    playerSize = 20;
   }
 }
