@@ -4,6 +4,7 @@ let ballarray = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  noStroke();
 }
 
 function draw() {
@@ -13,22 +14,41 @@ function draw() {
     ball.x += ball.dx;
     ball.y += ball.dy;
 
+    // teleport
+    
+    if (ball.x - ball.radius > width) {
+      ball.x = -ball.radius;
+    }
+    if (ball.x + ball.radius < 0) {
+      ball.x = width + ball.radius;
+    }
+    if (ball.y - ball.radius > height) {
+      ball.y = -ball.radius;
+    }
+    if (ball.y + ball.radius < 0) {
+      ball.y = height + ball.radius;
+    }
+
     //display
+    fill(ball.r,ball.g,ball.b);
     circle(ball.x, ball.y, ball.radius * 2);
   }
 }
 
 function mousePressed() {
-  spawnball();
+  spawnball(mouseX, mouseY);
 }
 
-function spawnball() {
+function spawnball(_x, _y) {
   let theBall = {
-    x: random(width),
-    y: random(height),
+    x: _x,
+    y: _y,
     dx: random(-5, 5),
     dy: random(-5, 5),
     radius: random(10, 40),
+    r: random(255),
+    g: random(255),
+    b: random(255)
   };
   ballarray.push(theBall);
 }
