@@ -1,15 +1,25 @@
 // Arrays and Object Notation Assignment
 // Grayer Hardy
-// 3/5/2026
+// 3/9/2026
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+function Particle(){
+  let options = {
+    restitution: 0.5,
+    friction: 0,
+    density: 1
+  };
 
-function setup() {
-  createCanvas(windowWidth, windowHeight);
+  x += random(-1,1);
+  this.body = Bodies.circle(x, y, r, options);
+  this.body.label = "particle";
+  this.r = r;
+
 }
 
-function draw() {
-  background(220);
+Particle.prototype.isOffScreen = functio(); {
+  let x = this.body.position.x;
+  let y = this.body.position.y;
 }
