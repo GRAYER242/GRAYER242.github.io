@@ -3,39 +3,50 @@
 // 3/9/2026
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// - Used new functions such as createVector and min/max
 
+// Defining variables
+// Block dimensions
 let blockWidth = 300;
 let blockHeight = 30;
+
+// Block movement
 let currentBlock;
 let blockDirection;
 let blockSpeed;
 let placedBlocks = [];
+
+// Win/lose/playing state variables
 let statePlaying = "playing";
 let stateLose = "lose";
 let stateWin = "win";
 let menuState = statePlaying;
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(windowWidth, windowHeight);
   textAlign(CENTER, CENTER);
   newGame();
 }
 
+// State variables
 function draw() {
   background(220);
+
+  // Playing
   if (menuState === statePlaying) {
     textSize(blockHeight);
     updateBlock();
     drawBlocks();
   }
+  // Lose
   else if (menuState === stateLose) {
     textSize(blockHeight * 2);
     fill(255, 0, 0);
-    text("Sorry, you lost :,(", width / 2, height / 2);
+    text("Sorry, you lost", width / 2, height / 2);
     textSize(blockHeight);
     text("Press space to start a new game!", width / 2, height * 3 / 4);
   }
+  // Win
   else if (menuState === stateWin) {
     textSize(blockHeight * 2);
     fill(0, 255, 0);
@@ -45,7 +56,9 @@ function draw() {
   }
 }
 
+// Space to drop block
 function keyReleased() {
+  // Space key
   if (key === " ") {
     if (menuState === statePlaying) {
       placeBlock();
@@ -57,6 +70,7 @@ function keyReleased() {
   }
 }
 
+// Block Attributes
 function newGame() {
   currentBlock = createVector(0, height - blockHeight, blockWidth);
   blockDirection = 1;
@@ -64,6 +78,7 @@ function newGame() {
   placedBlocks = [];
 }
 
+// Block Direction
 function updateBlock() {
   currentBlock.x += blockDirection * blockSpeed;
   if (currentBlock.x < 0) {
@@ -74,6 +89,7 @@ function updateBlock() {
   }
 }
 
+// Drawing the blocks
 function drawBlocks() {
   fill(255, 0, 0);
   rect(currentBlock.x, currentBlock.y, currentBlock.z, blockHeight);
@@ -84,6 +100,7 @@ function drawBlocks() {
   text(placedBlocks.length, blockHeight, blockHeight);
 }
 
+// Placing blocks (array usage)
 function placeBlock() {
   let prevBlock = placedBlocks[placedBlocks.length - 1];
   let newWidth = blockWidth;
@@ -104,10 +121,11 @@ function placeBlock() {
   }
 
   placedBlocks.push(currentBlock);
-  blockSpeed *= 1.1;
+  blockSpeed *= 1.05;
   newBlock(newWidth);
 }
 
+// Spawning the new block
 function newBlock(newWidth) {
   let blockStackHeight = (placedBlocks.length + 1) * blockHeight;
 
@@ -117,4 +135,9 @@ function newBlock(newWidth) {
   }
 
   currentBlock = createVector(0, height - blockStackHeight, newWidth);
+}
+
+// Ability to resize window
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
