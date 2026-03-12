@@ -22,6 +22,15 @@ let stateLose = "lose";
 let stateWin = "win";
 let menuState = statePlaying;
 
+// Backround
+let sky;
+let wood;
+
+function preload(){
+  sky = loadImage("Sky.jpg");
+  wood = loadImage("Wood.jpg");
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textAlign(CENTER, CENTER);
@@ -31,6 +40,7 @@ function setup() {
 // State variables
 function draw() {
   background(220);
+  image(sky, 0, 0, windowWidth, windowHeight);
 
   // Playing
   if (menuState === statePlaying) {
@@ -42,17 +52,17 @@ function draw() {
   else if (menuState === stateLose) {
     textSize(blockHeight * 2);
     fill(255, 0, 0);
-    text("Sorry, you lost", width / 2, height / 2);
+    text("Sorry, you Lost...", width / 2, height / 2);
     textSize(blockHeight);
-    text("Press space to start a new game!", width / 2, height * 3 / 4);
+    text("Press Space to Start a New Game!", width / 2, height * 3 / 4);
   }
   // Win
   else if (menuState === stateWin) {
     textSize(blockHeight * 2);
     fill(0, 255, 0);
-    text("Congrats, you won!", width / 2, height / 2);
+    text("Congrats, you Won!", width / 2, height / 2);
     textSize(blockHeight);
-    text("Press space to start a new game!", width / 2, height * 3 / 4);
+    text("Press Space to Start a New Game!", width / 2, height * 3 / 4);
   }
 }
 
@@ -121,7 +131,7 @@ function placeBlock() {
   }
 
   placedBlocks.push(currentBlock);
-  blockSpeed *= 1.05;
+  blockSpeed *= 1.065;
   newBlock(newWidth);
 }
 
