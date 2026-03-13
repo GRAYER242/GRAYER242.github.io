@@ -4,6 +4,7 @@
 //
 // Extra for Experts:
 // - Used new functions such as createVector and min/max
+// - Made image inside of moving object
 
 // Defining variables
 // Block dimensions
@@ -26,13 +27,15 @@ let menuState = statePlaying;
 let sky;
 let wood;
 
-function preload(){
+function preload() {
   sky = loadImage("Sky.jpg");
   wood = loadImage("Wood.jpg");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  imageMode(CENTER);
+  rectMode(CENTER);
   textAlign(CENTER, CENTER);
   newGame();
 }
@@ -40,7 +43,7 @@ function setup() {
 // State variables
 function draw() {
   background(220);
-  image(sky, 0, 0, windowWidth, windowHeight);
+  image(sky, width/2, height/2, windowWidth, windowHeight);
 
   // Playing
   if (menuState === statePlaying) {
@@ -101,7 +104,9 @@ function updateBlock() {
 
 // Drawing the blocks
 function drawBlocks() {
-  fill(255, 0, 0);
+  image(wood, currentBlock.x, currentBlock.y, currentBlock.z, blockHeight);
+  noFill();
+  noStroke();
   rect(currentBlock.x, currentBlock.y, currentBlock.z, blockHeight);
   fill(50);
   for (let block of placedBlocks) {
