@@ -23,13 +23,13 @@ let stateLose = "lose";
 let stateWin = "win";
 let menuState = statePlaying;
 
-// Backround
+// Images
 let sky;
 let wood;
 
 function preload() {
-  sky = loadImage("Sky.jpg");
-  wood = loadImage("Wood.jpg");
+  sky = loadImage("Sky.jpg"); // Background sky
+  wood = loadImage("Wood.jpg"); // Block texture
 }
 
 function setup() {
@@ -37,7 +37,7 @@ function setup() {
   imageMode(CENTER);
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
-  newGame();
+  newGame(); // Initializes game state
 }
 
 // State variables
@@ -48,8 +48,8 @@ function draw() {
   // Playing
   if (menuState === statePlaying) {
     textSize(blockHeight);
-    updateBlock();
-    drawBlocks();
+    updateBlock(); // Moves the current block left/right
+    drawBlocks(); // Draws the current and placed blocks
   }
   // Lose
   else if (menuState === stateLose) {
@@ -74,7 +74,7 @@ function keyReleased() {
   // Space key
   if (key === " ") {
     if (menuState === statePlaying) {
-      placeBlock();
+      placeBlock(); // Locks current block in place
     }
     else {
       newGame();
@@ -85,10 +85,10 @@ function keyReleased() {
 
 // Block Attributes
 function newGame() {
-  currentBlock = createVector(0, height - blockHeight, blockWidth);
+  currentBlock = createVector(0, height - blockHeight / 2, blockWidth);
   blockDirection = 1;
   blockSpeed = 2;
-  placedBlocks = [];
+  placedBlocks = []; // Reset placed blocks
 }
 
 // Block Direction
@@ -109,47 +109,58 @@ function drawBlocks() {
   noStroke();
   rect(currentBlock.x, currentBlock.y, currentBlock.z, blockHeight);
   fill(50);
-  for (let block of placedBlocks) {
+  for (let block of placedBlocks) { // Loop through array
+    image(wood, block.x, block.y, block.z, blockHeight);
+    noFill();
+    noStroke();
     rect(block.x, block.y, block.z, blockHeight);
   }
-  text(placedBlocks.length, blockHeight, blockHeight);
+  text(placedBlocks.length, blockHeight, blockHeight); // Shows stack height as number
 }
 
 // Placing blocks (array usage)
 function placeBlock() {
-  let prevBlock = placedBlocks[placedBlocks.length - 1];
+  let prevBlock = placedBlocks[placedBlocks.length - 1]; // Get last block
   let newWidth = blockWidth;
 
   if (prevBlock) {
-    let leftEdge = max(prevBlock.x, currentBlock.x);
-    let rightEdge = min(prevBlock.x + prevBlock.z, currentBlock.x + currentBlock.z);
+    // Convert centers to edges
+    let prevLeft = prevBlock.x - prevBlock.z / 2;
+    let prevRight = prevBlock.x + prevBlock.z / 2;
+    let currLeft = currentBlock.x - currentBlock.z / 2;
+    let currRight = currentBlock.x + currentBlock.z / 2;
 
+    // Calculate overlap
+    let leftEdge = max(prevLeft, currLeft);
+    let rightEdge = min(prevRight, currRight);
     newWidth = rightEdge - leftEdge;
 
-    currentBlock.x = leftEdge;
+    if (newWidth <= 0) {
+      menuState = stateLose; // Player loses if no overlap
+      return;
+    }
+
+    // Convert edges back to center
+    currentBlock.x = leftEdge + newWidth / 2;
     currentBlock.z = newWidth;
   }
 
-  if (newWidth < 0) {
-    menuState = stateLose;
-    return;
-  }
-
-  placedBlocks.push(currentBlock);
-  blockSpeed *= 1.065;
-  newBlock(newWidth);
+  placedBlocks.push(currentBlock); // Add block to array
+  blockSpeed *= 1.05; // Increase speed slightly
+  newBlock(newWidth); // Spawn next block
 }
 
 // Spawning the new block
 function newBlock(newWidth) {
-  let blockStackHeight = (placedBlocks.length + 1) * blockHeight;
+  let blockStackHeight = placedBlocks.length * blockHeight;
+  let yPos = height - blockHeight / 2 - blockStackHeight;
 
-  if (blockStackHeight > height) {
-    menuState = stateWin;
+  if (yPos < 0) {
+    menuState = stateWin; // player wins if stack reaches top
     return;
   }
 
-  currentBlock = createVector(0, height - blockStackHeight, newWidth);
+  currentBlock = createVector(0, yPos, newWidth); // New moving block
 }
 
 // Ability to resize window
