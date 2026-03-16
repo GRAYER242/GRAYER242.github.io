@@ -57,7 +57,7 @@ function draw() {
     fill(255, 0, 0);
     text("Sorry, you Lost...", width / 2, height / 2);
     textSize(blockHeight);
-    text("Press Space to Start a New Game!", width / 2, height * 3 / 4);
+    text("Press Space to Start a New Game! (Try resizing the window to increase/decrease the difficulty)", width / 2, height * 3 / 4);
   }
   // Win
   else if (menuState === stateWin) {
@@ -133,6 +133,7 @@ function placeBlock() {
     // Calculate overlap
     let leftEdge = max(prevLeft, currLeft);
     let rightEdge = min(prevRight, currRight);
+    
     newWidth = rightEdge - leftEdge;
 
     if (newWidth <= 0) {
