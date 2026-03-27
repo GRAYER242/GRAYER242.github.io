@@ -57,6 +57,7 @@ function draw() {
   drawGrid();
 }
 
+// still need to fix
 function drawGrid() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
@@ -97,10 +98,80 @@ function drawUI() {
   textSize(16);
 }
 
+// change to buttons?
 function mousePressed() {
   let panelX = 10;
 
   if (mouseX > panelX && mouseX < panelX + uiWidth - 20) {
-
+    if (mouseY > 160 && mouseY < 200) {
+      startGame();
+    }
+    if (mouseY > 210 && mouseY < 250 && playing) {
+      cashOut();
+    }
+    if (mouseY > 260 && mouseY <300) {
+      bet += 10;
+    }
+    if (mouseY > 310 && mouseY < 350) {
+      bet = max(10, bet - 10);
+    }
   }
+
+  if (!playing) {
+    return;
+  }
+
+  let i = floor((mouseX - uiWidth) / cellSize);
+  let j = floor(mouseY / cellSize);
+
+  if (i >= 0 && j >= 0 && i < cols && j < rows) {
+    if (!revealed[i][j]) {
+      revealed[i][j] = true;
+      
+      if (grid[i][j] === MINE) {
+        loseGame();
+      }
+      else {
+        multiplier += 0.3;
+      }
+    }
+  }
+}
+
+function startGame() {
+  if (!playing || balance < bet) {
+    return;
+  }
+  balance -= bet;
+  playing = true;
+  showMenu = false;
+  resetGame();
+}
+
+function cashOut() {
+  if (!playing) {
+    return;
+  }
+  let winnings = bet * multiplier;
+  balance += winnings;
+
+  playing = false;
+  showMenu = true;
+
+  alert("Cashed out: $" + floor(winnings * 100) / 100);
+}
+
+function loseGame() {
+  playing = false;
+  gameOver = true;
+  showMenu = true;
+
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      if (grid[i][j] === MINE) {
+        revealed[i][j] = true;
+      }
+    }
+  }
+  alert("You hit a mine!");
 }
