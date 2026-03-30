@@ -40,6 +40,7 @@ function resetGame() {
       revealed[i][j] = false;
     }
   }
+
   let placed = 0;
   while (placed < minesCount) {
     let x = floor(random(cols));
@@ -77,8 +78,8 @@ function drawGrid() {
       else {
         fill(30);
       }
-      
-      rect(x, y, cellSize / 2, y + cellSize / 2, 20);
+
+      rect(x, y, cellSize, cellSize, 10);
 
       if (revealed[i][j] && grid[i][j] === MINE) {
         fill(0);
@@ -96,6 +97,40 @@ function drawUI() {
 
   fill(255);
   textSize(16);
+
+  text("Balance: $" + balance, panelX, 40);
+  text("Bet: $" + bet, panelX, 70);
+  text("Multiplier: x" + floor(multiplier * 100) / 100, panelX, 100);
+
+  let profit = bet * multiplier;
+  text("Profit: $" + floor(profit), panelX, 130);
+
+  let startColor;
+  if (playing) {
+    startColor = (200, 0, 0);
+  }
+  else {
+    startColor = color(0, 200, 0);
+  }
+
+  drawButton(panelX, 160, "Start", startColor);
+  drawButton(panelX, 210, "Cash Out",);
+  drawButton(panelX, 260, "Bet +",);
+  drawButton(panelX, 310, "Bet -");
+}
+
+function drawButton(x, y, label, btnColor) {
+  if (!btnColor) {
+    btnColor = color(60);
+  }
+
+  fill(btnColor);
+  rect(x, y, uiWidth - 20, 40, 8);
+
+  fill(255);
+  textAlign(CENTER, CENTER);
+  text(label, x + (uiWidth - 20) / 2, y + 20);
+  textAlign(LEFT);
 }
 
 // change to buttons?
@@ -109,7 +144,7 @@ function mousePressed() {
     if (mouseY > 210 && mouseY < 250 && playing) {
       cashOut();
     }
-    if (mouseY > 260 && mouseY <300) {
+    if (mouseY > 260 && mouseY < 300) {
       bet += 10;
     }
     if (mouseY > 310 && mouseY < 350) {
@@ -127,7 +162,7 @@ function mousePressed() {
   if (i >= 0 && j >= 0 && i < cols && j < rows) {
     if (!revealed[i][j]) {
       revealed[i][j] = true;
-      
+
       if (grid[i][j] === MINE) {
         loseGame();
       }
@@ -139,7 +174,7 @@ function mousePressed() {
 }
 
 function startGame() {
-  if (!playing || balance < bet) {
+  if (playing || balance < bet) {
     return;
   }
   balance -= bet;
