@@ -7,19 +7,22 @@
 
 const MINE = 1;         // Represents a mine in the grid
 const OPEN_SPACE = 0;   // Represents an empty/revealed space
+
 let cols = 5;
 let rows = 5;
 let grid = [];          // Stores the grid layout (mines and open spaces)
 let revealed = [];      // Tracks which cells have been revealed
-let minesCount = 5;
-let cellSize = 80;
+let minesCount = 5;     // Number of mines
+let cellSize = 80;      // Size of cell
+
 let balance = 1000;     // Player's current balance
 let bet = 100;          // Current bet amount
 let multiplier = 1.0;   // Multiplier for winnings
-let playing = false;
-let gameOver = false;
-let showMenu = true;
-let uiWidth = 200;
+
+let playing = false;    // State variable for playing
+let gameOver = false;   // State variable for game over
+let showMenu = true;    // State variable for menu
+let uiWidth = 200;      // Width of menu UI
 
 function setup() {
   createCanvas(uiWidth + cols * cellSize, rows * cellSize);
@@ -32,20 +35,22 @@ function resetGame() {
   multiplier = 1.0;
   gameOver = false;
 
+  // Initiallize grid cells and reveal state
   for (let i = 0; i < cols; i++) {
     grid[i] = [];
     revealed[i] = [];
     for (let j = 0; j < rows; j++) {
-      grid[i][j] = OPEN_SPACE;
-      revealed[i][j] = false;
+      grid[i][j] = OPEN_SPACE; // Set all cells as empty
+      revealed[i][j] = false; // No cells revealed at start
     }
   }
 
+  // Randomly place mines in the grid
   let placed = 0;
   while (placed < minesCount) {
     let x = floor(random(cols));
     let y = floor(random(rows));
-    if (grid[x][y] === OPEN_SPACE) {
+    if (grid[x][y] === OPEN_SPACE) { // Only place mine if cell is empty
       grid[x][y] = MINE;
       placed++;
     }
@@ -62,21 +67,21 @@ function draw() {
 function drawGrid() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      let x = uiWidth + i * cellSize;
-      let y = j * cellSize;
+      let x = uiWidth + i * cellSize; // X position of cell
+      let y = j * cellSize; // Y position of cell
 
       stroke(40);
 
       if (revealed[i][j]) {
         if (grid[i][j] === MINE) {
-          fill(200, 50, 50);
+          fill(200, 50, 50); // Red for mine
         }
         else {
-          fill(50, 200, 120);
+          fill(50, 200, 120); // Green for safe
         }
       }
       else {
-        fill(30);
+        fill(30); // Dark gray for unrevealed
       }
 
       rect(x, y, cellSize, cellSize, 10);
@@ -92,12 +97,14 @@ function drawGrid() {
 function drawUI() {
   let panelX = 10;
 
+  // UI background
   fill(40);
   rect(0, 0, uiWidth, height);
 
   fill(255);
   textSize(16);
 
+  // Display player stats
   text("Balance: $" + balance, panelX, 40);
   text("Bet: $" + bet, panelX, 70);
   text("Multiplier: x" + floor(multiplier * 100) / 100, panelX, 100);
@@ -105,14 +112,16 @@ function drawUI() {
   let profit = bet * multiplier;
   text("Profit: $" + floor(profit), panelX, 130);
 
+  // Determine start button color based on game state
   let startColor;
   if (playing) {
-    startColor = (200, 0, 0);
+    startColor = (200, 0, 0); // Red if playing
   }
   else {
-    startColor = color(0, 200, 0);
+    startColor = color(0, 200, 0); // Green if not playing
   }
 
+  // Draw UI buttons
   drawButton(panelX, 160, "Start", startColor);
   drawButton(panelX, 210, "Cash Out",);
   drawButton(panelX, 260, "Bet +",);
@@ -121,11 +130,11 @@ function drawUI() {
 
 function drawButton(x, y, label, btnColor) {
   if (!btnColor) {
-    btnColor = color(60);
+    btnColor = color(60); // Default color
   }
 
   fill(btnColor);
-  rect(x, y, uiWidth - 20, 40, 8);
+  rect(x, y, uiWidth - 20, 40, 8); // BUtton rectangle
 
   fill(255);
   textAlign(CENTER, CENTER);
@@ -137,6 +146,7 @@ function drawButton(x, y, label, btnColor) {
 function mousePressed() {
   let panelX = 10;
 
+  // Check if clicking on UI panel buttons
   if (mouseX > panelX && mouseX < panelX + uiWidth - 20) {
     if (mouseY > 160 && mouseY < 200) {
       startGame();
