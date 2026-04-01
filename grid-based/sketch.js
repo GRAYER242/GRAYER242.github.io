@@ -134,7 +134,7 @@ function drawButton(x, y, label, btnColor) {
   }
 
   fill(btnColor);
-  rect(x, y, uiWidth - 20, 40, 8); // BUtton rectangle
+  rect(x, y, uiWidth - 20, 40, 8); // Button rectangle
 
   fill(255);
   textAlign(CENTER, CENTER);
@@ -162,35 +162,36 @@ function mousePressed() {
     }
   }
 
-  if (!playing) {
+  if (!playing) { // Ignore clicks if game not started
     return;
   }
 
+  // Determine which cell was clicked
   let i = floor((mouseX - uiWidth) / cellSize);
   let j = floor(mouseY / cellSize);
 
   if (i >= 0 && j >= 0 && i < cols && j < rows) {
-    if (!revealed[i][j]) {
+    if (!revealed[i][j]) { // Only reveal if not already revealed 
       revealed[i][j] = true;
 
-      if (grid[i][j] === MINE) {
+      if (grid[i][j] === MINE) { // Hit a mine
         loseGame();
       }
       else {
-        multiplier += 0.3;
+        multiplier += 0.3; // Increase multiplier for a safe
       }
     }
   }
 }
 
 function startGame() {
-  if (playing || balance < bet) {
+  if (playing || balance < bet) { // Cannot start if already playing or insufficent balance
     return;
   }
-  balance -= bet;
+  balance -= bet; // Deduct bet from balance
   playing = true;
   showMenu = false;
-  resetGame();
+  resetGame(); // Initialize grid and mines
 }
 
 function cashOut() {
@@ -211,6 +212,7 @@ function loseGame() {
   gameOver = true;
   showMenu = true;
 
+  // Reveal all mines
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       if (grid[i][j] === MINE) {
