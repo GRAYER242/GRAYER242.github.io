@@ -3,7 +3,9 @@
 // 2026-03-25
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// - Used floor and color function which I have not used yet
+// - Managed to create a balance that increases/decreases depending on the bet and will cash out ony if the button is clicked and no mines are hit
+// - Made it so the game stops if user has a insufficent balance
 
 const MINE = 1;         // Represents a mine in the grid
 const OPEN_SPACE = 0;   // Represents an empty/revealed space
@@ -63,7 +65,6 @@ function draw() {
   drawGrid();
 }
 
-// still need to fix
 function drawGrid() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
@@ -142,7 +143,6 @@ function drawButton(x, y, label, btnColor) {
   textAlign(LEFT);
 }
 
-// change to buttons?
 function mousePressed() {
   let panelX = 10;
 
