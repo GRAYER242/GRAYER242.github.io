@@ -3,9 +3,10 @@
 // 2026-03-25
 //
 // Extra for Experts:
-// - Used floor and color function which I have not used yet
-// - Managed to create a balance that increases/decreases depending on the bet and will cash out ony if the button is clicked and no mines are hit
+// - Used floor and color function which I have not used previously
+// - Managed to create a balance that increases/decreases depending on the bet and will cash out only if the button is clicked and no mines are hit
 // - Made it so the game stops if user has a insufficent balance
+// - Added resize window but used a function to calculate cell size based on screen space
 
 const MINE = 1;         // Represents a mine in the grid
 const OPEN_SPACE = 0;   // Represents an empty/revealed space
@@ -27,8 +28,22 @@ let showMenu = true;    // State variable for menu
 let uiWidth = 200;      // Width of menu UI
 
 function setup() {
-  createCanvas(uiWidth + cols * cellSize, rows * cellSize);
+  createCanvas(windowWidth, windowHeight);
+  updateLayout();
   resetGame();
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  updateLayout();
+}
+
+// Calculate cell size based on available screen space
+function updateLayout() {
+  let availableWidth = windowWidth - uiWidth;
+  let sizeW = availableWidth / cols;
+  let sizeH = windowHeight / rows;
+  cellSize = min(sizeW, sizeH);
 }
 
 function resetGame() {
@@ -89,7 +104,7 @@ function drawGrid() {
 
       if (revealed[i][j] && grid[i][j] === MINE) {
         fill(0);
-        ellipse(x + cellSize / 2, y + cellSize / 2, 20);
+        ellipse(x + cellSize / 2, y + cellSize / 2, cellSize * 0.4);
       }
     }
   }
@@ -154,11 +169,13 @@ function mousePressed() {
     if (mouseY > 210 && mouseY < 250 && playing) {
       cashOut();
     }
-    if (mouseY > 260 && mouseY < 300) {
-      bet += 10;
-    }
-    if (mouseY > 310 && mouseY < 350) {
-      bet = max(10, bet - 10);
+    if (!playing) { // Ignores clicks if game started and bet is already submitted
+      if (mouseY > 260 && mouseY < 300) {
+        bet += 10;
+      }
+      if (mouseY > 310 && mouseY < 350) {
+        bet = max(10, bet - 10);
+      }
     }
   }
 
