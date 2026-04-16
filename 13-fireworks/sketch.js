@@ -7,7 +7,7 @@ class Particle {
     this.dx = random(-5, 5);
     this.dy = random(-5, 5);
     this.radius = 3;
-    this.r =255;
+    this.r = 255;
     this.g = 0;
     this.b = 0;
     this.opacity = 255;
@@ -25,7 +25,11 @@ class Particle {
     this.y += this.dy;
 
     // fade away over time
-    this.opacity --;
+    this.opacity--;
+  }
+
+  isDead() {
+    return this.opacity <= 0;
   }
 }
 
@@ -39,9 +43,19 @@ function setup() {
 function draw() {
   background(0);
   for (let aFirework of theFireworks) {
-    aFirework.update();
-    aFirework.display();
+    if (aFirework.isDead()) {
+      // remove it
+      let index = theFireworks.indexOf(aFirework);
+      theFireworks.splice(index, 1);
+    }
+    else {
+      aFirework.update();
+      aFirework.display();
+    }
   }
+
+  // Insane amounts of lag
+  // mousePressed();
 }
 
 function mousePressed() {
