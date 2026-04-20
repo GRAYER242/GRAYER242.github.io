@@ -15,6 +15,7 @@
 - [Walker OOP Demo](12-walker)
 - [Fireworks Demo](13-fireworks)
 - [Ball Collison OOP](14-ball-oop)
+- [Connectd Nodes OOP](15-nodes)
 
 ## Assignmnets
 - [Interactive Scene](interactive-scene)
