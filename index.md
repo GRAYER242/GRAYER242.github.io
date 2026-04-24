@@ -16,8 +16,9 @@
 - [Fireworks Demo](13-fireworks)
 - [Ball Collison OOP](14-ball-oop)
 - [Connectd Nodes OOP](15-nodes)
+- [Inheritance OOP](16-inheritance)
 
 ## Assignmnets
 - [Interactive Scene](interactive-scene)
 - [Arrays and Object Notation](array-object)
-- [Grid Based Game](grid-based0)
+- [Grid Based Game](grid-based)
