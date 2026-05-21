@@ -18,6 +18,7 @@
 - [Connectd Nodes OOP](15-nodes)
 - [Inheritance OOP](16-inheritance)
 - [Collide 2D](17-collide)
+- [Recursive Circles](18-recursion)
 
 ## Assignmnets
 - [Interactive Scene](interactive-scene)
